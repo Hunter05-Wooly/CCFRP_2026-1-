@@ -4,26 +4,98 @@ output: html_document
 date: "2026-02-18"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+anews <- read_csv("hw_newsletter_dat.csv")
+anews_1 <- anews %>% 
+  mutate(species = as.factor(species))
+gear_type_fly <- anews_1 %>% 
+  filter(gear == "FLY") %>% 
+  group_by(species, gear, site, area) %>% 
+  summarise(count =n(), .groups = "drop") %>% 
+  filter(count > 4)
+gear_type_bar <- anews_1 %>% 
+  filter(gear == "BAR")
+gear_type_bat <- anews_1 %>% 
+  filter(gear == "BAT")
+```
+```{r}
+gear_type_fly_m_pb <- gear_type_fly %>% 
+  filter(site == "MPA", area =="PB") ##filtered for MPA vs REF
+gear_type_fly_m_pb %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_fly_m_pb, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("steelblue2", "darkred", "darkgreen","cyan4", "goldenrod3", "ivory3", "thistle3", "wheat2", "coral2", "aquamarine2", "darkolivegreen3"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_fly_m_bl <- gear_type_fly %>% 
+  filter(site == "MPA", area == "BL") ##filtered for MPA vs REF
+gear_type_fly_m_bl %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_fly_m_bl, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("steelblue2","thistle3","wheat2","darkred","ivory3", "cyan4", "goldenrod3", "coral2", "aquamarine2", "darkolivegreen3"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_fly_r_pb <- gear_type_fly %>% 
+  filter(site == "REF", area == "PB") ##filtered for MPA vs REF
+gear_type_fly_r_pb %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_fly_r_pb, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("coral2","steelblue2","darkred", "cyan4", "goldenrod3", "aquamarine2", "darkolivegreen3"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_fly_r_bl <- gear_type_fly %>% 
+  filter(site == "REF", area == "BL") ##filtered for MPA vs REF
+gear_type_fly_r_bl %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_fly_r_bl, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("steelblue2","darkred", "darkgreen", "ivory3", "cyan4",  "goldenrod3"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+

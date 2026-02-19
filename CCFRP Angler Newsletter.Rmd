@@ -1,0 +1,116 @@
+---
+title: "CCFRP Angler Newsletter"
+output: html_document
+date: "2026-02-19"
+---
+```{r}
+anews <- read_csv("hw_newsletter_dat.csv")
+anews_1 <- anews %>% 
+  mutate(species = as.factor(species))
+gear_type_fly <- anews_1 %>% 
+  filter(gear == "FLY") %>% 
+  group_by(species, gear, site) %>% 
+  summarise(count =n(), .groups = "drop") %>% 
+  filter(count > 4)
+gear_type_bar <- anews_1 %>% 
+  filter(gear == "BAR") %>% 
+  group_by(species, gear, site) %>% 
+  summarise(count =n(), .groups = "drop") %>% 
+  filter(count > 4)
+gear_type_bat <- anews_1 %>% 
+  filter(gear == "BAT") %>% 
+  group_by(species, gear, site) %>% 
+  summarise(count =n(), .groups = "drop") %>% 
+  filter(count > 4)
+```
+```{r}
+gear_type_fly_m <- gear_type_fly %>% 
+  filter(site == "MPA")
+gear_type_fly_m %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_fly_m, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("steelblue2",  "purple", "darkgreen","darkred", "goldenrod3", "black", "thistle3", "coral2", "aquamarine2", "darkolivegreen3"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_fly_r <- gear_type_fly %>% 
+  filter(site == "REF")
+gear_type_fly_r %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_fly_r, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("darkslategray", "steelblue2", "darkred", "goldenrod3", "black", "thistle3", "coral2", "aquamarine2", "darkolivegreen3"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_bat_m <- gear_type_bat %>% 
+  filter(site == "MPA")
+gear_type_bat_m %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_bat_m, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("steelblue2", "slateblue4", "darkgreen", "darkred", "goldenrod3", "black", "thistle3", "aquamarine2", "coral2", "darkolivegreen3", "yellow"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_bat_r <- gear_type_bat %>% 
+  filter(site == "REF")
+gear_type_bat_r %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_bat_r, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("darkslategray", "steelblue2", "darkgreen", "darkred", "goldenrod3", "black", "thistle3", "springgreen3", "coral2", "darkolivegreen3", "yellow"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_bar_m <- gear_type_bar %>% 
+  filter(site == "MPA")
+gear_type_bar_m %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_bar_m, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("darkslategray", "steelblue2", "darkgreen", "darkred", "goldenrod3", "black", "thistle3", "springgreen3", "coral2", "darkolivegreen3", "yellow"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+
