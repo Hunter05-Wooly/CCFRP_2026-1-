@@ -30,7 +30,7 @@ gear_type_fly_m %>%
   mutate(count = as.factor(count))
 ggplot (data = gear_type_fly_m, aes(x = gear, y = count, fill = species)) +
   geom_bar(stat = "identity") +
-   scale_fill_manual(name = "Species", values = c("steelblue2",  "purple", "darkgreen","darkred", "goldenrod3", "black", "thistle3", "coral2", "aquamarine2", "darkolivegreen3"))+
+   scale_fill_manual(name = "Species", values = c("steelblue2",  "purple", "darkgreen","darkred", "goldenrod3", "black", "thistle3", "coral2", "yellow", "darkolivegreen3"))+
   coord_polar(theta = "y", start=0) +
   theme_void() +
   theme(
@@ -102,7 +102,7 @@ gear_type_bar_m %>%
   mutate(count = as.factor(count))
 ggplot (data = gear_type_bar_m, aes(x = gear, y = count, fill = species)) +
   geom_bar(stat = "identity") +
-   scale_fill_manual(name = "Species", values = c("darkslategray", "steelblue2", "darkgreen", "darkred", "goldenrod3", "black", "thistle3", "springgreen3", "coral2", "darkolivegreen3", "yellow"))+
+   scale_fill_manual(name = "Species", values = c("steelblue2", "purple", "darkgreen", "darkred", "goldenrod3", "black", "thistle3", "aquamarine2", "coral2", "darkolivegreen3", "yellow"))+
   coord_polar(theta = "y", start=0) +
   theme_void() +
   theme(
@@ -112,5 +112,81 @@ ggplot (data = gear_type_bar_m, aes(x = gear, y = count, fill = species)) +
   theme(
     legend.key.size = unit(0.4, "cm")
   )
+```
+```{r}
+gear_type_bar_r <- gear_type_bar %>% 
+  filter(site == "REF")
+gear_type_bar_r %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_bar_r, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("darkslategray","steelblue2", "bisque2", "darkred", "goldenrod3", "black", "thistle3", "coral2", "darkolivegreen3", "yellow"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+gear_type_bar_r <- gear_type_bar %>% 
+  filter(site == "REF")
+gear_type_bar_r %>% 
+  mutate(count = as.factor(count))
+ggplot (data = gear_type_bar_r, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("darkslategray","steelblue2", "bisque2", "darkred", "goldenrod3", "black", "thistle3", "coral2", "darkolivegreen3", "yellow"))+
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  )
+```
+```{r}
+alldata <- anews_1 %>% 
+  group_by(species, gear, site) %>% 
+  summarise(count =n(), .groups = "drop") %>% 
+  filter(count > 4)
+
+alldata_1 <- alldata %>% 
+  mutate(count = as.factor(count))
+ggplot (data = alldata, aes(x = gear, y = count, fill = species)) +
+  geom_bar(stat = "identity") +
+   scale_fill_manual(name = "Species", values = c("darkslategray","steelblue2", "purple", "bisque2","slateblue4","darkgreen","darkred", "goldenrod3", "black", "thistle3","aquamarine2", "springgreen3","coral2", "darkolivegreen3", "yellow","pink"), labels = c(
+     "BLA" = "Black Rockfish", 
+     "BLU" = "Blue Rockfish", 
+     "BWN"="Brown Rockfish", 
+     "CBZ" = "Cabezon", 
+     "CNY" = "Canary Rockfish", 
+     "CPR" ="Copper Rockfish", 
+     "GPR" = "Gopher Rockfish",
+     "KLP" = "Kelp Rockfish", 
+     "LCD" = "Lingcod",
+     "OLV" = "Olive Rockfish",
+     "RSY" = "Rosy Rockfish",
+     "TRE" = "Tree Fish",
+     "VER" = "Vermillion Rockfish", 
+     "WHT" = "Ocean Whitefish", 
+     "YTL" = "Yellow Tail Rockfish"
+     )) +
+  coord_polar(theta = "y", start=0) +
+  theme_void() +
+  theme(
+    legend.text = element_text(size = 8),
+    legend.title = element_text(size = 9)
+  ) +
+  theme(
+    legend.key.size = unit(0.4, "cm")
+  ) #+
+ # scale_fill_discrete(labels = c("BLA" = "Black Rockfish", "BLU" = "Blue Rockfish", "BWN"="Brown Rockfish", "CBZ" = "Cabezon", "CNY" = "Canary Rockfish", "CPR" ="Copper Rockfish", "GPR" = "Gopher Rockfish","KLP" = "Kelp Rockfish", "LCD" = "Lingcod","OLV" = "Olive Rockfish","RSY" = "Rosy Rockfish","TRE" = "Tree Fish","VER" = "Vermillion Rockfish", "WHT" = "Ocean Whitefish", "YTL" = "Yellow Tail Rockfish"))
+
+
 ```
 
