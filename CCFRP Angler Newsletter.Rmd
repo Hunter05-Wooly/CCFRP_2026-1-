@@ -6,22 +6,23 @@ date: "2026-02-19"
 ```{r}
 anews <- read_csv("hw_newsletter_dat.csv")
 anews_1 <- anews %>% 
-  mutate(species = as.factor(species))
+  mutate(species = as.factor(species)) %>% 
 gear_type_fly <- anews_1 %>% 
   filter(gear == "FLY") %>% 
   group_by(species, gear, site) %>% 
-  summarise(count =n(), .groups = "drop") %>% 
-  filter(count > 4)
+  summarise(count =n(), .groups = "drop")  %>% 
+  mutate(species_comp = if_else(count < 8, "Other", species)) 
+  
 gear_type_bar <- anews_1 %>% 
   filter(gear == "BAR") %>% 
   group_by(species, gear, site) %>% 
   summarise(count =n(), .groups = "drop") %>% 
-  filter(count > 4)
+  
 gear_type_bat <- anews_1 %>% 
   filter(gear == "BAT") %>% 
   group_by(species, gear, site) %>% 
   summarise(count =n(), .groups = "drop") %>% 
-  filter(count > 4)
+  
 ```
 ```{r}
 gear_type_fly_m <- gear_type_fly %>% 
@@ -187,6 +188,7 @@ ggplot (data = alldata, aes(x = gear, y = count, fill = species)) +
   ) #+
  # scale_fill_discrete(labels = c("BLA" = "Black Rockfish", "BLU" = "Blue Rockfish", "BWN"="Brown Rockfish", "CBZ" = "Cabezon", "CNY" = "Canary Rockfish", "CPR" ="Copper Rockfish", "GPR" = "Gopher Rockfish","KLP" = "Kelp Rockfish", "LCD" = "Lingcod","OLV" = "Olive Rockfish","RSY" = "Rosy Rockfish","TRE" = "Tree Fish","VER" = "Vermillion Rockfish", "WHT" = "Ocean Whitefish", "YTL" = "Yellow Tail Rockfish"))
 
+##ggsave
 
 ```
 
