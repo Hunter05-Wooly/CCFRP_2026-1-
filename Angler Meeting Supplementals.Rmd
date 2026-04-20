@@ -1,0 +1,37 @@
+---
+title: "Angler Meeting Supplementals"
+output: html_document
+date: "2026-04-16"
+---
+
+```{r}
+angler_2 <- read_csv("hw_anglermeeting3.csv") %>% 
+  distinct(fish, .keep_all = TRUE) %>% 
+  filter(!station %in% c("9", "14", "4")) %>% 
+  filter(!is.na(station)) 
+
+angler_new <- angler_2 %>% 
+  mutate(cell_id = substr(drift, 10, 11),
+         trip_date = substr(drift, 4, 9))
+
+angler_new2 <- angler_new %>% 
+  group_by(angler, station, trip_date, cell_id) %>% 
+  count()
+
+angler_new3 <- angler_new2 %>% 
+  group_by(angler, station) %>% 
+  summarise(avg_fish_per_stat = mean(n))
+
+top_station <- angler_new3 %>%
+  group_by(station) %>%
+  slice_max(order_by = avg_fish_per_stat, n = 1)
+
+#oucnts <- angler_2 %>%
+ # group_by(station, angler) %>%
+  #summarise(total = n(), .groups = "drop")
+```
+```{r}
+
+```
+
+

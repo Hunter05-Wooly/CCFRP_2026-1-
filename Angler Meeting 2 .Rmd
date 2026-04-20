@@ -7,23 +7,177 @@ date: "2026-04-09"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r}
+ameet <- read_csv("hw_anglermeeting3.csv")
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+ameet_2 <- ameet %>% 
+  mutate(station = as.factor(station)) %>% 
+  select(station, angler, species, fish, area, gear, site) %>% 
+  distinct(fish, .keep_all = TRUE)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+top10list <- c("BLU", "GPR", "OLV", "VER", "KLP", "LCD" ,"CPR", "TRE")
+  
+ameet_3 <- ameet_2 %>% 
+  group_by(station, area, species, gear, site) %>% 
+  count() %>% 
+  arrange(desc(n)) %>% 
+  filter(!station %in% c("9", "14", "4")) %>% 
+  filter(!is.na(station)) %>% 
+  filter(species %in% top10list) 
+  
+  
+  
+```
+```{r}
+df_1 <- ameet_3 
+  
 
-```{r cars}
-summary(cars)
+ggplot(df_1, aes(x = station, y = n, fill = species)) +
+  geom_col(width = 1, stat = "identity", 
+           position = position_dodge2(preserve = "single"))+
+  facet_grid(site ~ area,
+             labeller = as_labeller(c(BL = "Piedras Blancas",
+                                      PB = "Point Buchon",
+                                      MPA = "MPA",
+                                      REF = "REF"))) +
+                                     
+  theme(
+    legend.text = element_text(size = 9),   # text inside legend
+    legend.title = element_text(size = 9), # legend title
+    legend.key.size = unit(0.4, "cm"),
+    guides(fill = guide_legend(nrow = 1)),
+     theme(plot.title = element_text(size = 9)),
+    legend.box = "horizontal") +
+    labs(title = "Number of Fish Caught Per Station, Area, and Site",
+       x = "Station",
+       y = "Count",
+       fill = "Species") +
+  scale_fill_manual(name = "Species", values = c("lightskyblue3", "coral", "red", "black", "hotpink", "aquamarine4", "navajowhite4", "darkgoldenrod3"),
+                         labels = c(
+     "BLU" = "Blue", 
+     "CPR" ="Copper", 
+     "GPR" = "Gopher",
+     "KLP" = "Kelp", 
+     "LCD" = "Lingcod",
+     "OLV" = "Olive",
+     "TRE" = "Tree",
+     "VER" = "Vermillion"))
+#ggplot(data, aes(x = area, y = count, fill = species)) +
+  #geom_bar(stat = "identity",
+           #position = position_dodge2(preserve = "single")) +
+  
+  
+```
+```{r}
+df_1 <- ameet_3 
+  
+
+ggplot(df_1, aes(x = station, y = n, fill = species)) +
+  geom_col(width = 1, stat = "identity", 
+           position = position_dodge2(preserve = "single"))+
+  facet_grid(site ~ area,
+             labeller = as_labeller(c(BL = "Piedras Blancas",
+                                      PB = "Point Buchon",
+                                      MPA = "MPA",
+                                      REF = "REF"))) +
+                                     
+  theme(
+    legend.text = element_text(size = 9),   # text inside legend
+    legend.title = element_text(size = 9), # legend title
+    legend.key.size = unit(0.3, "cm"),
+    guides(fill = guide_legend(nrow = 1)),
+     theme(plot.title = element_text(size = 9)),
+    legend.position = "bottom",
+    legend.justification = "center",
+    legend.box = "horizontal") +
+    labs(title = "Number of Fish Caught Per Station, Area, and Site",
+       x = "Station",
+       y = "Count",
+       fill = "Species") +
+  scale_fill_manual(name = "Species", values = c("lightskyblue3", "coral", "red", "black", "hotpink", "aquamarine4", "navajowhite4", "darkgoldenrod3"),
+                         labels = c(
+     "BLU" = "Blue", 
+     "CPR" ="Copper", 
+     "GPR" = "Gopher",
+     "KLP" = "Kelp", 
+     "LCD" = "Lingcod",
+     "OLV" = "Olive",
+     "TRE" = "Tree",
+     "VER" = "Vermillion"))
 ```
 
-## Including Plots
+```{r}
+df_3 <- df_1 %>% 
+  filter(!species %in% c("BLU", "GPR"))
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+ggplot(df_3, aes(x = station, y = n, fill = species)) +
+  geom_col(width = 1, stat = "identity", 
+           position = position_dodge2(preserve = "single"))+
+  facet_grid(site ~ area) +
+  theme(
+    legend.text = element_text(size = 9),   # text inside legend
+    legend.title = element_text(size = 9), # legend title
+    legend.key.size = unit(0.3, "cm"),
+    guides(fill = guide_legend(nrow = 1)),
+     theme(plot.title = element_text(size = 9)),
+    legend.position = "bottom",
+    legend.justification = "center",
+    legend.box = "horizontal") +
+    labs(title = "Number of Fish Caught Per Station and Area",
+       x = "Station",
+       y = "Count",
+       fill = "Species",
+       labels = c(
+     "BLU" = "Blue", 
+     "CPR" ="Copper", 
+     "GPR" = "Gopher",
+     "KLP" = "Kelp", 
+     "LCD" = "Lingcod",
+     "OLV" = "Olive",
+     "TRE" = "Tree",
+     "VER" = "Vermillion" 
+    ))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r} 
+ggplot(df_1, aes(x = gear, y = n, fill = area)) +
+  geom_col(width = 1, stat = "identity", 
+           position = position_dodge2(preserve = "single"))+
+  facet_wrap(~ species) +
+  theme(
+    #legend.text = element_text(size = 7),   # text inside legend
+    #legend.title = element_text(size = 9), # legend title
+    #legend.key.size = unit(0.3, "cm"),
+    #guides(fill = guide_legend(nrow = 1)),
+     theme(plot.title = element_text(size = 9)), 
+    #legend.position = "bottom",
+    #legend.justification = "center",
+    #legend.box = "horizontal") +
+    labs(title = "Number of Fish Caught Per Station and Area",
+       x = "Station",
+       y = "Count"))
+```
+```{r}
+df_2 <- df_1 %>% 
+  ungroup() %>%
+  select(!station)
+
+ggplot(df_2, aes(x = gear, y = n, fill = site)) +
+  geom_col(width = 0.8, 
+           position = position_dodge())+
+  facet_wrap(~ species) +
+  theme(
+    #legend.text = element_text(size = 7),   # text inside legend
+    #legend.title = element_text(size = 9), # legend title
+    #legend.key.size = unit(0.3, "cm"),
+    #guides(fill = guide_legend(nrow = 1)),
+     theme(plot.title = element_text(size = 9)), 
+    #legend.position = "bottom",
+    #legend.justification = "center",
+    #legend.box = "horizontal") +
+    labs(title = "Number of Fish Caught Per Station and Area",
+       x = "Station",
+       y = "Count"))
+```
+
